@@ -6,38 +6,12 @@
         <div class="headerChooseDistrict__title">空氣品質指標 (AQI)</div>
         <div class="districtsSelectorWrap">
           <select name="" id="districtsSelector">
-            <option value="----">請選擇地區</option>
+            <option value="----" >請選擇地區</option>
+            <option :value="item" v-for="item in countySelectorData">{{ item }}</option>
           </select>
         </div>
       </div>
-      <div class="chart">
-        <ul>
-          <li class="chart__item">
-            <div class="chart__item__header">0～50</div>
-            <div class="chart__item__body">良好</div>
-          </li>
-          <li class="chart__item">
-            <div class="chart__item__header">0～50</div>
-            <div class="chart__item__body">良好</div>
-          </li>
-          <li class="chart__item">
-            <div class="chart__item__header">0～50</div>
-            <div class="chart__item__body">良好</div>
-          </li>
-          <li class="chart__item">
-            <div class="chart__item__header">0～50</div>
-            <div class="chart__item__body">良好</div>
-          </li>
-          <li class="chart__item">
-            <div class="chart__item__header">0～50</div>
-            <div class="chart__item__body">良好</div>
-          </li>
-          <li class="chart__item">
-            <div class="chart__item__header">0～50</div>
-            <div class="chart__item__body">良好</div>
-          </li>
-        </ul>
-      </div>
+      <chart />
     </header>
     <div class="line">
       <div class="line__districtTitle">基隆市</div>
@@ -54,28 +28,28 @@
           <li class="detail__item">
             <div class="detail__item__title">
               <span class="detail__item__title__zh">臭氧</span>
-              <span class="detail__item__title__en">O3(ppb)</span>
+              <span class="detail__item__title__en">　O3(ppb)</span>
             </div>
             <div class="detail__item__value">30</div>
           </li>
           <li class="detail__item">
             <div class="detail__item__title">
               <span class="detail__item__title__zh">臭氧</span>
-              <span class="detail__item__title__en">O3(ppb)</span>
+              <span class="detail__item__title__en">　O3(ppb)</span>
             </div>
             <div class="detail__item__value">30</div>
           </li>
           <li class="detail__item">
             <div class="detail__item__title">
               <span class="detail__item__title__zh">臭氧</span>
-              <span class="detail__item__title__en">O3(ppb)</span>
+              <span class="detail__item__title__en">　O3(ppb)</span>
             </div>
             <div class="detail__item__value">30</div>
           </li>
           <li class="detail__item">
             <div class="detail__item__title">
               <span class="detail__item__title__zh">臭氧</span>
-              <span class="detail__item__title__en">O3(ppb)</span>
+              <span class="detail__item__title__en">　O3(ppb)</span>
             </div>
             <div class="detail__item__value">30</div>
           </li>
@@ -103,19 +77,62 @@
       </div>
     </main>
   </div>
-  <footer class="footer">
-    <span>資料來源：行政院環境保護署</span>
-    <span class="copyright">Copyright © 2019 HexSchool. All rights reserved.</span>
-  </footer>
+  <Footer />
 </div>
 </template>
 
 <script>
+import Chart from '@/components/Chart';
+import Footer from '@/components/Footer';
 
 export default {
-  name: 'home',
+  name: 'Index',
   components: {
-
+    Chart,
+    Footer,
+  },
+  data() {
+    return {
+      // api: 'https://script.google.com/macros/s/AKfycbxCXZjUDAF_i2DchP2dldBK2vbAjxRNhC50-7klXoeH9WjX9_s/exec?url=http://opendata2.epa.gov.tw/AQI.json',
+      api: `${process.env.VUE_APP_GOOGLE_APPS_SCRIPT}?url=${process.env.VUE_APP_AQI_API}`,
+      AQI_data: [],
+    }
+  },
+  methods: {
+    promise() {
+      const vm = this;
+      return new Promise(function(resolve, reject) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', vm.api);
+        xhr.send(null);
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 400) {
+            resolve(xhr.response);
+          } else {
+            reject(`連結失敗 ${xhr.status}`);
+          }
+        }
+      })
+    }
+  },
+  computed: {
+    countySelectorData() {
+      const data = [];
+      this.AQI_data.forEach((item) => {
+        data.push(item.County);
+      })
+      const _data = data.filter((item, index, arr) => {
+        return arr.indexOf(item) === index;
+      })
+      return _data;
+    }
+  },
+  created() {
+    this.promise().then((res) => {
+      this.AQI_data = Object.assign([], JSON.parse(res));
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 }
 </script>
@@ -157,30 +174,7 @@ export default {
       }
     }
   }
-  .chart {
-    width: 75%;
-    > ul {
-      display: flex;
-      border: 3px solid #000;
-    }
-    &__item {
-      flex: 1 1;
-      text-align: center;
-      &__header {
-        background-color: #95F084;
-        border-bottom: 3px solid #000;
-        padding: 16px 25px;
-      }
-      &__body {
-        background-color: #fff;
-        padding: 16px 25px;
-      }
-    }
-    &__item:not(:last-child) .chart__item__header,
-    &__item:not(:last-child) .chart__item__body {
-      border-right: 3px solid #000;
-    }
-  }
+
   //-----------------
   // line
   //-----------------
@@ -214,7 +208,7 @@ export default {
   // main
   //-----------------
   .main {
-    min-height: calc(100vh - 378px);
+    min-height: calc(100vh - 369px);
     display: flex;
     flex-wrap: wrap;
   }
@@ -289,22 +283,6 @@ export default {
         padding: 16px 39px;
         width: 50%;
       }
-    }
-  }
-  //-----------------
-  // footer
-  //-----------------  
-  .footer {
-    background-color: #000;
-    color: #fff;
-    margin-top: 50px;
-    height: 35px;
-    padding: 0 85px;
-    @include flex(space-between, center);
-    .copyright {
-      font-family: 'Open Sans';
-      font-weight: 100;
-      font-size: 16px;
     }
   }
 </style>
