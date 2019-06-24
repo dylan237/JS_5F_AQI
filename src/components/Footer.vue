@@ -1,7 +1,9 @@
 <template>
   <footer class="footer">
-    <span class="source">資料來源：行政院環境保護署</span>
-    <span class="copyright">Copyright &#169; 2019 HexSchool. All rights reserved.</span>
+    <div class="wrap">
+      <span class="source">資料來源：行政院環境保護署</span>
+      <span class="copyright">Copyright &#169; 2019 HexSchool. All rights reserved.</span>
+    </div>
   </footer>
 </template>
 
@@ -15,13 +17,14 @@ export default {
   .footer {
     background-color: #000;
     color: #fff;
-    margin-top: 50px;
-    min-height: 35px;
-    padding: 0 85px;
-    @include flex(space-between, center);
-    flex-wrap: wrap;
-    @include bp(2, '1280px', 0) {
-      padding: 15px;
+    padding: 15px 0;
+    .wrap {
+      @include flex(space-between, center);
+      flex-wrap: wrap;
+      max-width: 1280px;
+      min-width: 320px;
+      width: 100%;
+      margin: 0 auto;
     }
     .source {
       @include bp(2, '1280px', 0) {

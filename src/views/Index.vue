@@ -22,7 +22,7 @@
       <div class="detail">
         <ul>
           <li class="detail__userChoosedDistrict">
-            <div class="title" :class="{'font-s':selectedDistrictData.SiteName.length>2}">{{ selectedDistrictData.SiteName | ifEmpty }}</div>
+            <div class="title">{{ selectedDistrictData.SiteName | ifEmpty }}</div>
             <div class="value" :class="AQIsituation(selectedDistrictData.AQI)">{{ selectedDistrictData.AQI | ifEmpty }}</div>
           </li>
           <li class="detail__item">
@@ -79,7 +79,7 @@
       </div>
     </main>
   </div>
-  <Footer />  
+  <Footer v-if="!isLoading"/>  
   <Loading v-if="isLoading"/>
 </div>
 </template>
@@ -204,6 +204,7 @@ export default {
 <style lang="scss" scoped>
   .wrapper {
     max-width: 1280px;
+    min-width: 320px;
     width: 100%;
     padding: 50px 0;
     margin: 0 auto;
@@ -226,7 +227,7 @@ export default {
     width: 35%;
     height: 100%;
     margin-right: 20px;
-    padding: 0 15px;
+    // padding: 0 15px 0 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -240,9 +241,11 @@ export default {
       font-size: 40px;
       font-weight: bold;
       margin-bottom: 10px;
+      text-align: left;
       @include bp(2, '1280px', 0) {
         font-size: 30px;
         margin-bottom: 25px;
+        text-align: center;
       }
     }
     .districtsSelectorWrap {
@@ -279,8 +282,12 @@ export default {
       justify-content: center;
     }
     &__districtTitle {
+      text-align: left;
       font-size: 36px;
       flex: 0 0 150px;
+      @include bp(2, '1280px', 0) {
+        text-align: center;
+      }
     }
     &__dashDec {
       flex: 1 0;
@@ -299,6 +306,7 @@ export default {
       }
     }
     &__updatedTime {
+      text-align: right;
       flex: 0 0 200px;
       padding-top: 15px;
     }
@@ -309,6 +317,7 @@ export default {
   .main {
     min-height: calc(100vh - 369px);
     display: flex;
+    justify-content: space-between;
     flex-wrap: wrap;
   }
   .detail {

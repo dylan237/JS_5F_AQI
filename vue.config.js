@@ -1,8 +1,9 @@
 const webpack = require('webpack')
 module.exports = {
   lintOnSave: false,
-  runtimeCompiler: true,
+  runtimeCompiler: false,
   productionSourceMap: false,
+  publicPath: './',
 
   devServer: {
       port: 8000,
@@ -44,6 +45,4 @@ module.exports = {
       })
       .end()
   },
-
-  publicPath: '/',
 }

@@ -32,13 +32,13 @@ export default {
   }
   .donut {
     display: inline-block;
-    border: 10px solid #000;
+    border: 5px solid #000;
     border-left-color: #7983ff;
   /*   border-right-color: #7983ff; */
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: donut-spin 1.2s linear infinite;
+    width: 70px;
+    height: 70px;
+    animation: donut-spin .8s linear infinite;
 }
 
 </style>
