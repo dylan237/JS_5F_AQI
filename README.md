@@ -6,8 +6,8 @@
 - HTML
 - SCSS
 - Vue
-- Vue Cli3
-- Ajax
+- Vue CLI3
+- AJAX
 - Promise
 
 ## BOSS弱點
